@@ -35,10 +35,10 @@ class TesouroDireto(Asset):
         days_to_maturity = (self.maturity - date).days
         return self.face_value / (1 + yield_) ** (days_to_maturity / 365)
 
-    def price(self, base_date: datetime.date, base_price: float, target_date: Optional[datetime.date] = None) -> float:
-        target_date = target_date or datetime.date.today()
+    def price(self, base_date: datetime.date, base_price: float, date: Optional[datetime.date] = None) -> float:
+        date = date or datetime.date.today()
         yield_ = self.price_to_yield(base_price, base_date)
-        return self.yield_to_price(yield_, target_date)
+        return self.yield_to_price(yield_, date)
 
 
 @dataclass

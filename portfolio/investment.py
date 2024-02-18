@@ -9,9 +9,11 @@ class Investment:
     security: Asset
     orders: List[Order] = []
 
-    def invest(self, quantity: float, price: float, date: Optional[datetime.date] = None):
+    def invest(self, quantity: float, price: float, date: Optional[datetime.date] = None) -> Order:
         date = date or datetime.date.today()
-        self.orders.append(Order(quantity, price, date))
+        order = Order(quantity, price, date)
+        self.orders.append(order)
+        return order
 
     def total_price(self) -> float:
         return sum(investment.total_price for investment in self.orders)

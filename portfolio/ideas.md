@@ -3,11 +3,10 @@
 
 Operations
 
-- Each operation (buy/sell) is a transaction
+- Each order (buy/sell) is a transaction
 - There are more types of transactions
     - Dividend earning
     - JCP earning
-    - 
 
 
 Fixed Income
@@ -15,7 +14,7 @@ Fixed Income
 - Each asset has a buy point in time
 - Usually have a maturity date, when investor get back the face value
 - Can have multiple applications
-- Can have cuupons
+- Can have coupons
     - paid at regular time intervals
 - Have an interest rate, which can be
     - fixed
