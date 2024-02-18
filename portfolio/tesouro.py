@@ -2,6 +2,8 @@ import datetime
 from dataclasses import dataclass
 from typing import Optional
 
+from portfolio.investment import Investment
+
 
 @dataclass(frozen=True)
 class TesouroDireto:
@@ -17,7 +19,7 @@ class TesouroDireto:
 
         if days_to_maturity == 0 and price == self.face_value:
             return 0
-        
+
         try:
             return (self.face_value / price) ** (365 / days_to_maturity) - 1
         except ZeroDivisionError:
@@ -26,14 +28,14 @@ class TesouroDireto:
     def yield_to_price(self, yield_: float, date: Optional[datetime.date] = None) -> float:
         if yield_ < -1:
             raise ValueError('Minimum yield is -100%')
-        
+
         date = date or datetime.date.today()
         days_to_maturity = (self.maturity - date).days
         return self.face_value / (1 + yield_) ** (days_to_maturity / 365)
 
 
 @dataclass
-class TesouroDiretoInvestment:
+class TesouroDiretoInvestment(Investment):
     security: TesouroDireto
     buy_date: datetime.date
     price: float
