@@ -1,24 +1,7 @@
 import datetime
 
-import pytest
+from portfolio import TesouroDireto
 
-from portfolio import TesouroDireto, TesouroDiretoInvestment
-
-
-@pytest.fixture
-def tesouro_prefixado():
-    return TesouroDireto(
-        maturity=datetime.date(2027, 1, 1),
-        face_value=1000,
-    )
-
-@pytest.fixture
-def investimento_prefixado_2027(tesouro_prefixado: TesouroDireto):
-    return TesouroDiretoInvestment(
-        security=tesouro_prefixado,
-        buy_date=datetime.date(2024, 2, 16),
-        price=759.05,
-    )
 
 def test_price_at_zero_yield(tesouro_prefixado: TesouroDireto):
     face_value = tesouro_prefixado.face_value

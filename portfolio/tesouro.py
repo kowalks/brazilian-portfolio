@@ -1,12 +1,14 @@
 import datetime
-from dataclasses import dataclass
-from typing import Optional
+from dataclasses import dataclass, field
+from typing import List, Optional
 
+from portfolio.asset import Asset
 from portfolio.investment import Investment
+from portfolio.order import Order
 
 
 @dataclass(frozen=True)
-class TesouroDireto:
+class TesouroDireto(Asset):
     maturity: datetime.date
     face_value: float
 
@@ -33,17 +35,16 @@ class TesouroDireto:
         days_to_maturity = (self.maturity - date).days
         return self.face_value / (1 + yield_) ** (days_to_maturity / 365)
 
+    def price(self, base_date: datetime.date, base_price: float, target_date: Optional[datetime.date] = None) -> float:
+        target_date = target_date or datetime.date.today()
+        yield_ = self.price_to_yield(base_price, base_date)
+        return self.yield_to_price(yield_, target_date)
+
 
 @dataclass
 class TesouroDiretoInvestment(Investment):
     security: TesouroDireto
-    buy_date: datetime.date
-    price: float
+    orders: List[Order] = field(default_factory=list)
 
-    def __post_init__(self):
-        self.days_to_maturity = (self.security.maturity - self.buy_date).days
-        self.annualized_return = self.security.price_to_yield(self.price, self.buy_date)
-
-    def theoretical_price(self, date: Optional[datetime.date] = None) -> float:
-        date = date or datetime.date.today()
-        return self.security.yield_to_price(self.annualized_return, date)
+    def price(self, date: Optional[datetime.date] = None) -> float:
+        return sum(order.qty * self.security.price(order.date, order.price, date) for order in self.orders)

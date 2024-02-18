@@ -9,6 +9,4 @@ tesouro_prefixiado = TesouroDireto(
 
 invest = TesouroDiretoInvestment(
     security=tesouro_prefixiado,
-    buy_date=datetime.date(2026, 1, 1),
-    price=900,
 )
